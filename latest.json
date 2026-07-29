@@ -1,0 +1,11 @@
+{
+    "version": "2.8.0",
+    "notes": "Mô tả cập nhật",
+    "pub_date": "2026-07-29T10:00:00Z",
+    "platforms": {
+        "windows-x86_64": {
+            "signature": "windows_signature_placeholder",
+            "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/v2.8.0/quan-ly-cong-viec_2.8.0_x64-setup.exe"
+        }
+    }
+}

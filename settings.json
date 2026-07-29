@@ -1,0 +1,12 @@
+{
+  // Application settings
+  "updateButton": false,
+  // Startup dialog settings
+  "shouldDisplayStartupDialog": false,
+  "warningDialogMessage": "Phiên bản này có nguy cơ mất dữ liệu. Vui lòng sử dụng phiên bản mới nhất.",
+  "warningDialogTitle": "Warning",
+  "warningDialogType": "warning",
+  "warningDialogIcon": "warning",
+  "warningDialogButtonText": "Đồng ý",
+  "warningDialogButtonAction": "ok"
+}
