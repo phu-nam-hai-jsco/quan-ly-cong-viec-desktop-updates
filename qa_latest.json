@@ -1,11 +1,11 @@
 {
-    "version": "2.8.0",
+    "version": "2.8.3-beta",
     "notes": "Mô tả cập nhật",
     "pub_date": "2026-07-29T10:00:00Z",
     "platforms": {
         "windows-x86_64": {
-            "signature": "windows_signature_placeholder",
-            "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/v2.8.0/quan-ly-cong-viec_2.8.0_x64-setup.exe"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RGhMUUNrd01SWHJMK2U5Mmh4VGpib0pQdXlveXNQQld2WEkvWW1jaHdnTW9aN1FrNVNnUUpBcDBEVjhGSjBrOEJOQ0JQZzN4eUxjSnR2cEc3ZlpkK3c0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg1ODM2MTM4CWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8yLjguM194NjQtc2V0dXAuZXhlCi93UGZRbDRGMUV2eXlSUkFoM2dVdy9wdGZHa3lnZFlNV0ZzZVNPYW1VQ3h4cU5hUWxXbnBheDVuNkpIL21rR2dJRTkrRCtzOU5hV3ZiZ0VNalYzYkNBPT0K",
+            "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/2.8.3-beta/quan-ly-cong-viec_2.8.3_x64-setup.exe"
         }
     }
 }
