@@ -39,7 +39,6 @@ jobs:
         with:
           repository: TanNhatCMS/QuanLyCongViec
           ref: ${{ github.event.client_payload.sha }}
-          # Token để kéo code từ repo chính (Bắt buộc nếu repo chính là private)
           token: ${{ secrets.MAIN_REPO_CHECKOUT_TOKEN }}
 
       - name: Setup pnpm
@@ -161,7 +160,7 @@ jobs:
           # Tìm file exe và sig
           $exeFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
           $sigFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*.sig" | Select-Object -First 1
-          
+
           if (-not $exeFile -or -not $sigFile) {
             Write-Warning "Không tìm thấy file exe hoặc sig, bỏ qua update json."
             exit 0
@@ -169,7 +168,7 @@ jobs:
 
           $exeName = $exeFile.Name
           $sigContent = (Get-Content -Path $sigFile.FullName -Raw -Encoding utf8).Trim()
-          
+
           # Cập nhật url download (trỏ tới release của repo updates)
           $url = "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/$version/$exeName"
 
@@ -202,7 +201,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add latest.json qa_latest.json
-          
+
           # Nếu có thay đổi thì commit & push
           if (git status --porcelain) {
             git commit -m "Update updater json for version ${{ env.BUILD_VERSION }} [skip ci]"
