@@ -1,0 +1,225 @@
+name: Build Desktop (Windows)
+
+on:
+  repository_dispatch:
+    types: [trigger-desktop-build]
+
+concurrency:
+  group: build-desktop-${{ github.event.client_payload.branch }}
+  cancel-in-progress: true
+
+# Cấp quyền rõ ràng cho GITHUB_TOKEN để đảm bảo có thể push code và tạo Release
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Windows NSIS installer
+    runs-on: windows-latest
+    timeout-minutes: 60
+
+    env:
+      # ── Build meta ──────────────────────────────────────────────────────
+      FORCE_COLOR: '1'
+
+      # ── Build env & version ────────────────────────────────────────────
+      BUILD_ENV: ${{ github.event.client_payload.mode != '' && github.event.client_payload.mode || (github.event.client_payload.branch == 'main' && 'production' || 'development') }}
+      BUILD_VERSION: ${{ github.event.client_payload.version }}
+
+      # ── Build Parameters được truyền từ repo gốc ────────────────────────
+      SENTRY_DSN_DESKTOP: ${{ github.event.client_payload.sentry_dsn || '' }}
+      NEXT_PUBLIC_AG_GRID_LICENSE: ${{ github.event.client_payload.ag_grid_license || '' }}
+      NEXT_PUBLIC_API_BASE_URL: ${{ github.event.client_payload.api_url || '' }}
+      TAURI_SIGNING_PRIVATE_KEY: ${{ github.event.client_payload.signing_key || '' }}
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ github.event.client_payload.signing_pwd || '' }}
+
+    steps:
+      - name: Checkout Main Repository
+        uses: actions/checkout@v4
+        with:
+          repository: phu-nam-hai-jsco/QuanLyCongViec
+          ref: ${{ github.event.client_payload.sha }}
+          # Token để kéo code từ repo chính (Bắt buộc nếu repo chính là private)
+          token: ${{ secrets.MAIN_REPO_CHECKOUT_TOKEN }}
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+
+      - name: Setup Bun (build scripts)
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.3.14
+
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo registry & build
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            artifacts/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('apps/desktop/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+
+      - name: Install frontend dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Print build info
+        shell: pwsh
+        run: |
+          Write-Host "🔢 Version  : ${{ env.BUILD_VERSION }}"
+          Write-Host "🛠️ Env     : ${{ env.BUILD_ENV }}"
+          Write-Host "🔗 API URL  : ${{ env.NEXT_PUBLIC_API_BASE_URL != '' && env.NEXT_PUBLIC_API_BASE_URL || '(build-time default)' }}"
+          Write-Host "🔒 Sentry   : ${{ env.SENTRY_DSN_DESKTOP != '' && 'configured' || 'disabled' }}"
+          Write-Host "✍️  Signing  : ${{ env.TAURI_SIGNING_PRIVATE_KEY != '' && 'configured' || 'unsigned' }}"
+
+      - name: Build desktop
+        shell: pwsh
+        run: bun run build:desktop
+
+      - name: Upload NSIS installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: quanlycongviec-windows-${{ env.BUILD_VERSION }}-${{ env.BUILD_ENV }}-${{ github.event.client_payload.sha }}
+          path: artifacts/target/release/bundle/nsis/*-setup.exe
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0
+
+      - name: Summary
+        shell: pwsh
+        run: |
+          $signed = if ("${{ env.TAURI_SIGNING_PRIVATE_KEY }}" -ne "") { "✅ Đã ký" } else { "⚠️ Chưa ký (unsigned)" }
+          $sentry = if ("${{ env.SENTRY_DSN_DESKTOP }}" -ne "") { "✅ Bật" } else { "➖ Tắt" }
+          $apiUrl = if ("${{ env.NEXT_PUBLIC_API_BASE_URL }}" -ne "") { "${{ env.NEXT_PUBLIC_API_BASE_URL }}" } else { "(build-time default)" }
+
+          $sigContent = ""
+          $sigFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*.sig" -ErrorAction SilentlyContinue | Select-Object -First 1
+          if ($sigFile) {
+            $sigContent = Get-Content -Path $sigFile.FullName -Raw -Encoding utf8
+            Write-Host "📝 Signature file: $($sigFile.Name)"
+          }
+
+          $summary = @"
+          ## 🖥️ Desktop Build Complete
+
+          | Thông tin        | Giá trị |
+          |------------------|---------| 
+          | **Version**      | ``${{ env.BUILD_VERSION }}`` |
+          | **Env**          | ``${{ env.BUILD_ENV }}`` |
+          | **Branch**       | ``${{ github.event.client_payload.branch }}`` |
+          | **Commit**       | ``${{ github.event.client_payload.sha }}`` |
+          | **API URL**      | $apiUrl |
+          | **Code Signing** | $signed |
+          | **Sentry**       | $sentry |
+
+          ### 📥 Download artifact
+          Tìm file ``*-setup.exe`` trong tab **Artifacts** của run này.
+          "@
+
+          if ($sigContent) {
+            $summary += @"
+
+          ### 🔏 Updater Signature (.sig)
+          Dùng nội dung này để cập nhật trường ``signature`` trong ``latest.json`` của auto-updater.
+
+          ``````
+          $($sigContent.Trim())
+          ``````
+          "@
+          }
+
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding utf8 -Append
+
+      - name: Checkout Desktop Updates Repo
+        uses: actions/checkout@v4
+        with:
+          repository: phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: desktop-updates-repo
+
+      - name: Update Updater JSON
+        shell: pwsh
+        run: |
+          $jsonFile = if ("${{ env.BUILD_ENV }}" -eq "production") { "latest.json" } else { "qa_latest.json" }
+          $version = "${{ env.BUILD_VERSION }}"
+          
+          # Tìm file exe và sig
+          $exeFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
+          $sigFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*.sig" | Select-Object -First 1
+          
+          if (-not $exeFile -or -not $sigFile) {
+            Write-Warning "Không tìm thấy file exe hoặc sig, bỏ qua update json."
+            exit 0
+          }
+
+          $exeName = $exeFile.Name
+          $sigContent = (Get-Content -Path $sigFile.FullName -Raw -Encoding utf8).Trim()
+          
+          # Cập nhật url download (trỏ tới release của repo updates)
+          $url = "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/$version/$exeName"
+
+          $jsonPath = "desktop-updates-repo/$jsonFile"
+          if (Test-Path $jsonPath) {
+            $json = Get-Content $jsonPath | ConvertFrom-Json
+            $json.version = $version
+            $json.pub_date = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+            
+            # Đảm bảo structure platforms.windows-x86_64 tồn tại
+            if (-not $json.platforms) {
+              $json | Add-Member -MemberType NoteProperty -Name "platforms" -Value @{ "windows-x86_64" = @{} }
+            } elseif (-not $json.platforms."windows-x86_64") {
+              $json.platforms | Add-Member -MemberType NoteProperty -Name "windows-x86_64" -Value @{}
+            }
+            
+            $json.platforms."windows-x86_64".signature = $sigContent
+            $json.platforms."windows-x86_64".url = $url
+
+            $json | ConvertTo-Json -Depth 10 | Set-Content $jsonPath -Encoding utf8
+            Write-Host "✅ Đã cập nhật $jsonFile"
+          } else {
+            Write-Warning "Không tìm thấy file $jsonPath"
+          }
+
+      - name: Commit and Push Updater JSON
+        shell: pwsh
+        run: |
+          cd desktop-updates-repo
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add latest.json qa_latest.json
+          
+          # Nếu có thay đổi thì commit & push
+          if (git status --porcelain) {
+            git commit -m "Update updater json for version ${{ env.BUILD_VERSION }} [skip ci]"
+            git push
+            Write-Host "✅ Đã push cập nhật json lên repo."
+          } else {
+            Write-Host "✅ Không có thay đổi nào cần push."
+          }
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          # Đẩy file vào Release của chính repo desktop-updates
+          repository: phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ env.BUILD_VERSION }}
+          name: Version ${{ env.BUILD_VERSION }}
+          files: |
+            artifacts/target/release/bundle/nsis/*-setup.exe
+            artifacts/target/release/bundle/nsis/*.sig
+          draft: false
+          # Đánh dấu prerelease nếu là bản build dev
+          prerelease: ${{ env.BUILD_ENV == 'development' }}
