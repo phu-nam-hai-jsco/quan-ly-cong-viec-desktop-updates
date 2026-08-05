@@ -1,0 +1,23 @@
+root = true
+
+# All files
+[*]
+indent_style = space
+
+# Xml files
+[*.{xml,csproj,props,targets,ruleset,nuspec,resx}]
+indent_size = 2
+
+# Json files
+[*.{json,config}]
+indent_size = 2
+
+#### Core EditorConfig Options ####
+
+# Indentation and spacing
+indent_size = 4
+tab_width = 4
+
+# New line preferences
+end_of_line = lf
+insert_final_newline = true
