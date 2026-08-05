@@ -37,7 +37,7 @@ jobs:
       - name: Checkout Main Repository
         uses: actions/checkout@v4
         with:
-          repository: phu-nam-hai-jsco/QuanLyCongViec
+          repository: TanNhatCMS/QuanLyCongViec
           ref: ${{ github.event.client_payload.sha }}
           # Token để kéo code từ repo chính (Bắt buộc nếu repo chính là private)
           token: ${{ secrets.MAIN_REPO_CHECKOUT_TOKEN }}
@@ -154,6 +154,9 @@ jobs:
         run: |
           $jsonFile = if ("${{ env.BUILD_ENV }}" -eq "production") { "latest.json" } else { "qa_latest.json" }
           $version = "${{ env.BUILD_VERSION }}"
+          if ("${{ env.BUILD_ENV }}" -eq "development") {
+            $version = "$version-beta"
+          }
           
           # Tìm file exe và sig
           $exeFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
@@ -215,8 +218,8 @@ jobs:
           # Đẩy file vào Release của chính repo desktop-updates
           repository: phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.BUILD_VERSION }}
-          name: Version ${{ env.BUILD_VERSION }}
+          tag_name: ${{ env.BUILD_VERSION }}${{ env.BUILD_ENV == 'development' && '-beta' || '' }}
+          name: Version ${{ env.BUILD_VERSION }}${{ env.BUILD_ENV == 'development' && '-beta' || '' }}
           files: |
             artifacts/target/release/bundle/nsis/*-setup.exe
             artifacts/target/release/bundle/nsis/*.sig
