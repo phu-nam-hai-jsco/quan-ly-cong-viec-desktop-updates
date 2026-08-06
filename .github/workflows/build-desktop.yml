@@ -202,11 +202,28 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add latest.json qa_latest.json
 
-          # Nếu có thay đổi thì commit & push
+          # Nếu có thay đổi thì commit & push (sử dụng git pull --rebase + retry để tránh race condition / rejected push)
           if (git status --porcelain) {
             git commit -m "Update updater json for version ${{ env.BUILD_VERSION }} [skip ci]"
-            git push
-            Write-Host "✅ Đã push cập nhật json lên repo."
+
+            $pushed = $false
+            for ($i = 1; $i -le 5; $i++) {
+              git pull --rebase origin main
+              git push origin main
+              if ($LASTEXITCODE -eq 0) {
+                $pushed = $true
+                break
+              }
+              Write-Host "⚠️ Push thất bại (lần $i). Đang thử lại sau 2 giây..."
+              Start-Sleep -Seconds 2
+            }
+
+            if ($pushed) {
+              Write-Host "✅ Đã push cập nhật json lên repo."
+            } else {
+              Write-Error "❌ Push thất bại sau 5 lần thử."
+              exit 1
+            }
           } else {
             Write-Host "✅ Không có thay đổi nào cần push."
           }
