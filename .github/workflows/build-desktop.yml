@@ -84,7 +84,7 @@ jobs:
           cache: pnpm
 
       - name: Setup Bun (build scripts)
-        uses: oven-sh/setup-bun@v1
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: 1.3.14
 
@@ -187,7 +187,7 @@ jobs:
           if ("${{ env.BUILD_ENV }}" -eq "development") {
             $version = "$version-beta"
           }
-          
+
           # Tìm file exe và sig
           $exeFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
           $sigFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*.sig" | Select-Object -First 1
