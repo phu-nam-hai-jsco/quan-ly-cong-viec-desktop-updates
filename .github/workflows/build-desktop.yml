@@ -60,7 +60,13 @@ jobs:
             echo "$KEY" >> $GITHUB_ENV
             echo "EOF" >> $GITHUB_ENV
             
-            echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD=$PWD" >> $GITHUB_ENV
+            echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD<<EOF" >> $GITHUB_ENV
+            echo "$PWD" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            
+            if [ "${{ env.BUILD_ENV }}" = "development" ]; then
+              echo "BUILD_VERSION=${{ env.BUILD_VERSION }}-beta" >> $GITHUB_ENV
+            fi
           else
             echo "No encrypted payload found."
           fi
@@ -281,8 +287,8 @@ jobs:
           # Đẩy file vào Release của chính repo desktop-updates
           repository: phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: ${{ env.BUILD_VERSION }}${{ env.BUILD_ENV == 'development' && '-beta' || '' }}
-          name: Version ${{ env.BUILD_VERSION }}${{ env.BUILD_ENV == 'development' && '-beta' || '' }}
+          tag_name: ${{ env.BUILD_VERSION }}
+          name: Version ${{ env.BUILD_VERSION }}
           files: |
             artifacts/target/release/bundle/nsis/*-setup.exe
             artifacts/target/release/bundle/nsis/*.sig
