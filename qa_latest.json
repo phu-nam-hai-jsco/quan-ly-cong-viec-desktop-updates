@@ -1,11 +1,11 @@
 {
-  "version": "2.9.3-beta-beta",
+  "version": "2.9.3-beta",
   "notes": "Mô tả cập nhật",
   "pub_date": "2026-08-11T10:21:50Z",
   "platforms": {
     "windows-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RHVvTnJXVGEwNlR6dVNLRmlqdUE3b2g3a0EzWmxQR3RtU2lMWTNhQVdhSEJaK2xmWU13TWk3aWJ4aXA3T1BWSjlkYjVuTDR4V2MwU3ppTmRhTmZwemdFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg2NDQzNzA2CWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8yLjkuMy1iZXRhX3g2NC1zZXR1cC5leGUKaEl2eTE3eWRnTjdRaTlaSThyRjB1SWxQb29HNld6djRPRXhDMzE1OTJpTTUvSEdEd0sxVTNtTmI5bGpvNE9xN1IrajVZTjhrbnRMVDhsTDFudUNvQ1E9PQo=",
-      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/2.9.3-beta-beta/quan-ly-cong-viec_2.9.3-beta_x64-setup.exe"
+      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/2.9.3-beta/quan-ly-cong-viec_2.9.3-beta_x64-setup.exe"
     }
   }
 }

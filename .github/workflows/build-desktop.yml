@@ -190,9 +190,6 @@ jobs:
         run: |
           $jsonFile = if ("${{ env.BUILD_ENV }}" -eq "production") { "latest.json" } else { "qa_latest.json" }
           $version = "${{ env.BUILD_VERSION }}"
-          if ("${{ env.BUILD_ENV }}" -eq "development") {
-            $version = "$version-beta"
-          }
 
           # Tìm file exe và sig
           $exeFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
