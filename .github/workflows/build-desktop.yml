@@ -28,6 +28,10 @@ jobs:
 
       # ── Build Parameters được truyền từ repo gốc ────────────────────────
       NEXT_PUBLIC_API_BASE_URL: ${{ github.event.client_payload.api_url || '' }}
+      SENTRY_DSN_DESKTOP: ''
+      NEXT_PUBLIC_AG_GRID_LICENSE: ''
+      TAURI_SIGNING_PRIVATE_KEY: ''
+      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ''
 
     steps:
       - name: Decrypt Secrets
@@ -39,15 +43,15 @@ jobs:
           if [ -n "$ENCRYPTED_PAYLOAD" ]; then
             echo "$ENCRYPTED_PAYLOAD" | base64 -d | openssl enc -d -aes-256-cbc -salt -pbkdf2 -pass pass:$PAYLOAD_ENCRYPTION_KEY -out decrypted.json
             
-            AG_GRID=$(jq -r '.ag_grid_license' decrypted.json)
-            SENTRY=$(jq -r '.sentry_dsn' decrypted.json)
-            KEY=$(jq -r '.signing_key' decrypted.json)
-            PWD=$(jq -r '.signing_pwd' decrypted.json)
+            AG_GRID=$(jq -r '.ag_grid_license // empty' decrypted.json)
+            SENTRY=$(jq -r '.sentry_dsn // empty' decrypted.json)
+            KEY=$(jq -r '.signing_key // empty' decrypted.json)
+            PWD=$(jq -r '.signing_pwd // empty' decrypted.json)
             
-            echo "::add-mask::$AG_GRID"
-            echo "::add-mask::$SENTRY"
-            echo "::add-mask::$KEY"
-            echo "::add-mask::$PWD"
+            [ -n "$AG_GRID" ] && echo "::add-mask::$AG_GRID"
+            [ -n "$SENTRY" ] && echo "::add-mask::$SENTRY"
+            [ -n "$KEY" ] && echo "::add-mask::$KEY"
+            [ -n "$PWD" ] && echo "::add-mask::$PWD"
             
             echo "NEXT_PUBLIC_AG_GRID_LICENSE=$AG_GRID" >> $GITHUB_ENV
             echo "SENTRY_DSN_DESKTOP=$SENTRY" >> $GITHUB_ENV
