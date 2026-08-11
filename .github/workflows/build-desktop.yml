@@ -258,6 +258,21 @@ jobs:
           } else {
             Write-Host "✅ Không có thay đổi nào cần push."
           }
+      - name: Extract Release Notes
+        shell: pwsh
+        run: |
+          $version = "${{ env.BUILD_VERSION }}" -replace '-beta$', ''
+          $changelog = Get-Content -Path "CHANGELOG.md" -Raw
+          $regex = "(?s)## \[$version\].*?(?=\n## \[|\Z)"
+          if ($changelog -match $regex) {
+            $notes = $matches[0]
+            $notes = $notes -replace "(?s)^## \[$version\].*?\n+", ""
+            $notes | Set-Content release_notes.md -Encoding utf8
+            Write-Host "✅ Đã trích xuất changelog cho phiên bản $version"
+          } else {
+            Write-Warning "Không tìm thấy changelog cho phiên bản $version"
+            "Bản cập nhật $version" | Set-Content release_notes.md -Encoding utf8
+          }
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -271,5 +286,6 @@ jobs:
             artifacts/target/release/bundle/nsis/*-setup.exe
             artifacts/target/release/bundle/nsis/*.sig
           draft: false
+          body_path: release_notes.md
           # Đánh dấu prerelease nếu là bản build dev
           prerelease: ${{ env.BUILD_ENV == 'development' }}
