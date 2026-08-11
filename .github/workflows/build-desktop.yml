@@ -267,11 +267,12 @@ jobs:
           if ($changelog -match $regex) {
             $notes = $matches[0]
             $notes = $notes -replace "(?s)^## \[$version\].*?\n+", ""
+            $notes += "`n`n**Full Changelog**: https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/commits/$version"
             $notes | Set-Content release_notes.md -Encoding utf8
             Write-Host "✅ Đã trích xuất changelog cho phiên bản $version"
           } else {
             Write-Warning "Không tìm thấy changelog cho phiên bản $version"
-            "Bản cập nhật $version" | Set-Content release_notes.md -Encoding utf8
+            "Bản cập nhật $version`n`n**Full Changelog**: https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/commits/$version" | Set-Content release_notes.md -Encoding utf8
           }
 
       - name: Create GitHub Release
