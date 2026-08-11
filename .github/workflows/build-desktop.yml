@@ -27,13 +27,40 @@ jobs:
       BUILD_VERSION: ${{ github.event.client_payload.version }}
 
       # ── Build Parameters được truyền từ repo gốc ────────────────────────
-      SENTRY_DSN_DESKTOP: ${{ github.event.client_payload.sentry_dsn || '' }}
-      NEXT_PUBLIC_AG_GRID_LICENSE: ${{ github.event.client_payload.ag_grid_license || '' }}
       NEXT_PUBLIC_API_BASE_URL: ${{ github.event.client_payload.api_url || '' }}
-      TAURI_SIGNING_PRIVATE_KEY: ${{ github.event.client_payload.signing_key || '' }}
-      TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ github.event.client_payload.signing_pwd || '' }}
 
     steps:
+      - name: Decrypt Secrets
+        shell: bash
+        env:
+          ENCRYPTED_PAYLOAD: ${{ github.event.client_payload.encrypted_payload }}
+          PAYLOAD_ENCRYPTION_KEY: ${{ secrets.PAYLOAD_ENCRYPTION_KEY }}
+        run: |
+          if [ -n "$ENCRYPTED_PAYLOAD" ]; then
+            echo "$ENCRYPTED_PAYLOAD" | base64 -d | openssl enc -d -aes-256-cbc -salt -pbkdf2 -pass pass:$PAYLOAD_ENCRYPTION_KEY -out decrypted.json
+            
+            AG_GRID=$(jq -r '.ag_grid_license' decrypted.json)
+            SENTRY=$(jq -r '.sentry_dsn' decrypted.json)
+            KEY=$(jq -r '.signing_key' decrypted.json)
+            PWD=$(jq -r '.signing_pwd' decrypted.json)
+            
+            echo "::add-mask::$AG_GRID"
+            echo "::add-mask::$SENTRY"
+            echo "::add-mask::$KEY"
+            echo "::add-mask::$PWD"
+            
+            echo "NEXT_PUBLIC_AG_GRID_LICENSE=$AG_GRID" >> $GITHUB_ENV
+            echo "SENTRY_DSN_DESKTOP=$SENTRY" >> $GITHUB_ENV
+            
+            echo "TAURI_SIGNING_PRIVATE_KEY<<EOF" >> $GITHUB_ENV
+            echo "$KEY" >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+            
+            echo "TAURI_SIGNING_PRIVATE_KEY_PASSWORD=$PWD" >> $GITHUB_ENV
+          else
+            echo "No encrypted payload found."
+          fi
+
       - name: Checkout Main Repository
         uses: actions/checkout@v4
         with:
