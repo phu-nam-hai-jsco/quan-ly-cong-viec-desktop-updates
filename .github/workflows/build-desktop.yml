@@ -235,7 +235,7 @@ jobs:
 
           # Nếu có thay đổi thì commit & push (sử dụng git pull --rebase + retry để tránh race condition / rejected push)
           if (git status --porcelain) {
-            git commit -m "Update updater json for version ${{ env.BUILD_VERSION }} [skip ci]"
+            git commit -m "🚀 release: Update updater json for version ${{ env.BUILD_VERSION }} [skip ci]"
 
             $pushed = $false
             for ($i = 1; $i -le 5; $i++) {
