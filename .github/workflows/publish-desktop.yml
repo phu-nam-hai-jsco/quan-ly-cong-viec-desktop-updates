@@ -89,7 +89,9 @@ jobs:
           cache: true
 
       - name: Setup Bun (build scripts)
-        run: pnpm env add --global bun@latest
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
