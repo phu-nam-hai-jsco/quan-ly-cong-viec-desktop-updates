@@ -28,7 +28,8 @@ jobs:
       BUILD_VERSION: ${{ github.event.client_payload.version }}
 
       # ── Build Parameters được truyền từ repo gốc ────────────────────────
-      NEXT_PUBLIC_API_BASE_URL: ${{ github.event.client_payload.api_url || '' }}
+      NEXT_PUBLIC_API_BASE_URL: ''
+      API_BASE_URL: ''
       SENTRY_DSN_DESKTOP: ''
       NEXT_PUBLIC_AG_GRID_LICENSE: ''
       TAURI_SIGNING_PRIVATE_KEY: ''
@@ -46,6 +47,7 @@ jobs:
             
             AG_GRID=$(jq -r '.ag_grid_license // empty' decrypted.json)
             SENTRY=$(jq -r '.sentry_dsn // empty' decrypted.json)
+            API_URL=$(jq -r '.api_url // empty' decrypted.json)
             KEY=$(jq -r '.signing_key // empty' decrypted.json)
             PWD=$(jq -r '.signing_pwd // empty' decrypted.json)
             
@@ -55,6 +57,8 @@ jobs:
             [ -n "$PWD" ] && echo "::add-mask::$PWD"
             
             echo "NEXT_PUBLIC_AG_GRID_LICENSE=$AG_GRID" >> $GITHUB_ENV
+            echo "NEXT_PUBLIC_API_BASE_URL=$API_URL" >> $GITHUB_ENV
+            echo "API_BASE_URL=$API_URL" >> $GITHUB_ENV
             echo "SENTRY_DSN_DESKTOP=$SENTRY" >> $GITHUB_ENV
             
             echo "TAURI_SIGNING_PRIVATE_KEY<<EOF" >> $GITHUB_ENV
