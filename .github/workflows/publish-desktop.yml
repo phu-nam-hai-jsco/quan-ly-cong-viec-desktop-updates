@@ -143,7 +143,6 @@ jobs:
           | **Env**          | ``${{ env.BUILD_ENV }}`` |
           | **Branch**       | ``${{ github.event.client_payload.branch }}`` |
           | **Commit**       | ``${{ github.event.client_payload.sha }}`` |
-          | **API URL**      | $apiUrl |
           | **Code Signing** | $signed |
           | **Sentry**       | $sentry |
 
