@@ -1,11 +1,11 @@
 {
-    "versions": [
-        {
-            "name": "2.8.0",
-            "description": "",
-            "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/tag/2.8.0",
-            "date": "2026/07/29",
-            "signature": "N/A"
-        }
-    ]
+  "versions": [
+    {
+      "name": "2.8.0",
+      "description": "",
+      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/tag/2.8.0",
+      "date": "2026/07/29",
+      "signature": "N/A"
+    }
+  ]
 }
