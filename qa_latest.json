@@ -1,11 +1,11 @@
 {
-  "version": "2.11.16-beta",
+  "version": "2.11.17-beta",
   "notes": "Mô tả cập nhật",
-  "pub_date": "2026-09-09T05:52:59Z",
+  "pub_date": "2026-09-09T06:54:11Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RHRlYWpyUnN1azZYcnZUZDY2T2wwUW5rWEJOWjZZYVVveGJRcWtjZXVNZ0k3VmJpZmVOY1BoOFZucmdrZ3FVUDBlY1ZuMWpQT09IMDhEM1R0VjFPNlFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg4OTMzMTc0CWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8yLjExLjE2LWJldGFfeDY0LXNldHVwLmV4ZQpFTXlKS2diWGtPUnpKZDZOc3pSUmpZNnc5bEdObGt6STN6KzR0UkNudUFmejZFazlLRDAwOHZqQjlvMVN5dkZIeEhYcTVtMVVuS1UwMkpjOEJ1bEVBQT09Cg==",
-      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/2.11.16-beta/quan-ly-cong-viec_2.11.16-beta_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RGcvS2hHNTJFVmM5eEdGYzMwOU9tcjJGR3NPTnZ2cnhQV0s2T0dXckNSK2V6UzQ4cmFkQTREZ0xiZ2NRUFRQdTJsc1JpVWFKQkcxVVJDTVdwdjFNM2djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg4OTM2ODQ3CWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8yLjExLjE3LWJldGFfeDY0LXNldHVwLmV4ZQpKOVZLWW8rYmhmNENZYVErYmlETnpERE5jY2NzcnBqRURqdGl3S3ZLVUpnWG1XRHZmTGR3OHg2L2N2Wk9VZ2xySGRiQm04N08ySi80eFFIa01nWWRBZz09Cg==",
+      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/2.11.17-beta/quan-ly-cong-viec_2.11.17-beta_x64-setup.exe"
     }
   }
 }
