@@ -1,11 +1,11 @@
 {
-  "version": "3.0.2-beta",
+  "version": "3.0.3-beta",
   "notes": "Mô tả cập nhật",
-  "pub_date": "2026-09-24T06:08:05Z",
+  "pub_date": "2026-09-24T07:50:56Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RHZ1TGU0dUtsRTdkaGJMc2VsOXJyYm9yeFJKVC9OSEYydE40SzBWWnVSSkN3aVhYMm12OEhObDJTM095aExiRG15WjZYVGlqNitDaWljWUhYMDA5OUFRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwMjMwMDgwCWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8zLjAuMi1iZXRhX3g2NC1zZXR1cC5leGUJdmVyc2lvbjozLjAuMi1iZXRhCmtNOGVCYWpkTEVtUVhpODI0djlpTDVtc2RjZHJJL0RtK2RmMGJxaUFlMXNoUGloaXEwZFJBWGJsYTloS0FzU1E4eDJyQXYvS0hkLzI2T2IzMkpJSUR3PT0K",
-      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/3.0.2-beta/quan-ly-cong-viec_3.0.2-beta_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RHVzZ25qdFhYdmNYTXd3bHUrbXNWbndpM0JQTTAyMUI2bmdYR3IyT3JUUzlsQThHUGlQOHo1TkNaWGNLL242L29RS0FUcUxSQkZ5S2pWMkFqS3VUV0FBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzkwMjM2MjUxCWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8zLjAuMy1iZXRhX3g2NC1zZXR1cC5leGUJdmVyc2lvbjozLjAuMy1iZXRhCnV1ZTdOUm03bEFBNmNkcUdsdnp6WjQyQ2Jhb1hNVzlka0YxUWdWY1hRSWJ0L2ZzMnUvcEFBSDlCV1lSWGNMNlk4cHdvVjlwMEVCMGJNNmh1SU1wK0J3PT0K",
+      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/3.0.3-beta/quan-ly-cong-viec_3.0.3-beta_x64-setup.exe"
     }
   }
 }
