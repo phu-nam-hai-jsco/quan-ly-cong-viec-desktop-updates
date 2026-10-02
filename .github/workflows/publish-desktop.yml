@@ -97,6 +97,9 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Install dependencies (root — workspace bao frontend + desktop submodules)
+        run: pnpm install --frozen-lockfile
+
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
