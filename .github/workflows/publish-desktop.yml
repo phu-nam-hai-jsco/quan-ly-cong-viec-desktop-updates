@@ -82,9 +82,10 @@ jobs:
       - name: Checkout Main Repository
         uses: actions/checkout@v7
         with:
-          repository: TanNhatCMS/QuanLyCongViec
+          repository: phu-nam-hai-jsco/task-manager
           ref: ${{ github.event.client_payload.sha }}
-          token: ${{ secrets.MAIN_REPO_CHECKOUT_TOKEN }}
+          token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
+          submodules: recursive
 
       - name: Setup pnpm
         uses: pnpm/setup@v3
