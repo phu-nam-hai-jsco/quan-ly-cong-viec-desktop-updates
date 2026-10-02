@@ -95,6 +95,13 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: 'pnpm'
+          cache-dependency-path: pnpm-lock.yaml
+
       - name: Install dependencies (root — workspace bao frontend + desktop submodules)
         run: pnpm install --frozen-lockfile
 
