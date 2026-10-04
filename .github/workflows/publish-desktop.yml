@@ -79,13 +79,21 @@ jobs:
             echo "No encrypted payload found."
           fi
 
-      - name: Checkout Main Repository
+      - name: Checkout Desktop Repository
         uses: actions/checkout@v7
         with:
-          repository: phu-nam-hai-jsco/task-manager
-          ref: ${{ github.event.client_payload.sha }}
+          repository: phu-nam-hai-jsco/task-manager-desktop
+          ref: ${{ github.event.client_payload.branch || 'main' }}
           token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
-          submodules: recursive
+          path: desktop
+
+      - name: Checkout Frontend Repository
+        uses: actions/checkout@v7
+        with:
+          repository: phu-nam-hai-jsco/task-manager-frontend
+          ref: ${{ github.event.client_payload.branch || 'main' }}
+          token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
+          path: frontend
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
@@ -99,10 +107,13 @@ jobs:
         uses: actions/setup-node@v7
         with:
           node-version: '24'
-          cache: 'pnpm'
-          cache-dependency-path: pnpm-lock.yaml
 
-      - name: Install dependencies (root — workspace bao frontend + desktop submodules)
+      - name: Install dependencies (frontend)
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile
+
+      - name: Install dependencies (desktop)
+        working-directory: desktop
         run: pnpm install --frozen-lockfile
 
       - name: Setup Rust toolchain
@@ -114,8 +125,8 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-            artifacts/target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('apps/desktop/Cargo.lock') }}
+            desktop/artifacts/target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('desktop/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-
 
@@ -152,6 +163,7 @@ jobs:
 
       - name: Build desktop
         shell: pwsh
+        working-directory: desktop
         run: bun run build:desktop
 
       - name: Summary
@@ -162,7 +174,7 @@ jobs:
           $apiUrl = if ("${{ env.NEXT_PUBLIC_API_BASE_URL }}" -ne "") { "${{ env.NEXT_PUBLIC_API_BASE_URL }}" } else { "(build-time default)" }
 
           $sigContent = ""
-          $sigFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*.sig" -ErrorAction SilentlyContinue | Select-Object -First 1
+          $sigFile = Get-ChildItem -Path "desktop/artifacts/target/release/bundle/nsis" -Filter "*.sig" -ErrorAction SilentlyContinue | Select-Object -First 1
           if ($sigFile) {
             $sigContent = Get-Content -Path $sigFile.FullName -Raw -Encoding utf8
             Write-Host "📝 Signature file: $($sigFile.Name)"
@@ -212,8 +224,8 @@ jobs:
           $version = "${{ env.BUILD_VERSION }}"
 
           # Tìm file exe và sig
-          $exeFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
-          $sigFile = Get-ChildItem -Path "artifacts/target/release/bundle/nsis" -Filter "*.sig" | Select-Object -First 1
+          $exeFile = Get-ChildItem -Path "desktop/artifacts/target/release/bundle/nsis" -Filter "*-setup.exe" | Select-Object -First 1
+          $sigFile = Get-ChildItem -Path "desktop/artifacts/target/release/bundle/nsis" -Filter "*.sig" | Select-Object -First 1
 
           if (-not $exeFile -or -not $sigFile) {
             Write-Warning "Không tìm thấy file exe hoặc sig, bỏ qua update json."
@@ -310,8 +322,8 @@ jobs:
           tag_name: ${{ env.BUILD_VERSION }}
           name: Version ${{ env.BUILD_VERSION }}
           files: |
-            artifacts/target/release/bundle/nsis/*-setup.exe
-            artifacts/target/release/bundle/nsis/*.sig
+            desktop/artifacts/target/release/bundle/nsis/*-setup.exe
+            desktop/artifacts/target/release/bundle/nsis/*.sig
           draft: false
           body_path: release_notes.md
           # Đánh dấu prerelease nếu là bản build dev
