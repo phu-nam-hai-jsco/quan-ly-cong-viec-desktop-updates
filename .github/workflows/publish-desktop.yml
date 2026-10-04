@@ -79,11 +79,26 @@ jobs:
             echo "No encrypted payload found."
           fi
 
+      - name: Resolve Checkout Ref
+        id: checkout_ref
+        shell: bash
+        run: |
+          # QUY TẮC: Production CHỈ checkout main build mới chuẩn!
+          if [ "${{ env.BUILD_ENV }}" = "production" ]; then
+            echo "target_ref=main" >> $GITHUB_OUTPUT
+            echo "✅ Target ref for PRODUCTION: main"
+          else
+            DEV_BRANCH="${{ github.event.client_payload.branch }}"
+            [ -z "$DEV_BRANCH" ] && DEV_BRANCH="dev"
+            echo "target_ref=$DEV_BRANCH" >> $GITHUB_OUTPUT
+            echo "🧪 Target ref for DEVELOPMENT: $DEV_BRANCH"
+          fi
+
       - name: Checkout Desktop Repository
         uses: actions/checkout@v7
         with:
           repository: phu-nam-hai-jsco/task-manager-desktop
-          ref: ${{ github.event.client_payload.branch || 'main' }}
+          ref: ${{ steps.checkout_ref.outputs.target_ref }}
           token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
           path: desktop
 
@@ -91,7 +106,7 @@ jobs:
         uses: actions/checkout@v7
         with:
           repository: phu-nam-hai-jsco/task-manager-frontend
-          ref: ${{ github.event.client_payload.branch || 'main' }}
+          ref: ${{ steps.checkout_ref.outputs.target_ref }}
           token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
           path: frontend
 
