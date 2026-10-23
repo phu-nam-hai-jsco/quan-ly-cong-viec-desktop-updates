@@ -110,20 +110,24 @@ jobs:
           token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
           path: frontend
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
         with:
-          version: 12.6.0
+          node-version: latest
 
       - name: Setup Bun (build scripts)
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
         with:
-          node-version: '24'
+          package_json_file: desktop/package.json
+          cache: true
+          cache_dependency_path: |
+            frontend/pnpm-lock.yaml
+            desktop/pnpm-lock.yaml
 
       - name: Install dependencies (frontend)
         working-directory: frontend
@@ -132,6 +136,14 @@ jobs:
       - name: Install dependencies (desktop)
         working-directory: desktop
         run: pnpm install --frozen-lockfile
+
+      - name: Print toolchain versions
+        shell: pwsh
+        run: |
+          Write-Host "Node           : $(node -v)"
+          Write-Host "Bun            : $(bun -v)"
+          Write-Host "pnpm (frontend): $(pnpm -C frontend -v)"
+          Write-Host "pnpm (desktop) : $(pnpm -C desktop -v)"
 
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
