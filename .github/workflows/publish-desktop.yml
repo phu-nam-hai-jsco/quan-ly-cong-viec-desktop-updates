@@ -90,6 +90,14 @@ jobs:
           else
             DEV_BRANCH="${{ github.event.client_payload.branch }}"
             [ -z "$DEV_BRANCH" ] && DEV_BRANCH="dev"
+
+            # Security: chỉ cho phép branch name an toàn (không nhận ref tùy ý như refs/pull/*, SHA, ký tự lạ...)
+            # Cho phép chữ, số, ., _, -, / và không cho phép bắt đầu bằng '-' hoặc chứa '..'
+            if [[ "$DEV_BRANCH" == -* ]] || [[ "$DEV_BRANCH" == *".."* ]] || [[ ! "$DEV_BRANCH" =~ ^[A-Za-z0-9._/-]+$ ]] || [[ "$DEV_BRANCH" == refs/* ]]; then
+              echo "❌ Unsafe branch/ref from client_payload.branch: $DEV_BRANCH"
+              exit 1
+            fi
+
             echo "target_ref=$DEV_BRANCH" >> $GITHUB_OUTPUT
             echo "🧪 Target ref for DEVELOPMENT: $DEV_BRANCH"
           fi
