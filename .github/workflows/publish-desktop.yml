@@ -113,7 +113,7 @@ jobs:
       - name: Checkout Frontend Repository
         uses: actions/checkout@v7
         with:
-          repository: phu-nam-hai-jsco/task-manager-frontend
+          repository: phu-nam-hai-jsco/work-management-frontend
           ref: ${{ steps.checkout_ref.outputs.target_ref }}
           token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
           path: frontend
