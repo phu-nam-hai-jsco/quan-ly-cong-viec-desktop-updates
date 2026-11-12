@@ -88,6 +88,29 @@ jobs:
             echo "target_ref=main" >> $GITHUB_OUTPUT
             echo "✅ Target ref for PRODUCTION: main"
           else
+            # Chỉ cho phép các ref an toàn đã định nghĩa trước để tránh checkout mã không tin cậy
+            requested_ref="${{ github.event.client_payload.branch }}"
+            if [ -z "$requested_ref" ]; then
+              echo "::error::client_payload.branch is required for non-production builds"
+              exit 1
+            fi
+
+            case "$requested_ref" in
+              main|develop|staging|release/*|hotfix/*)
+                if [[ "$requested_ref" =~ ^[A-Za-z0-9._/-]+$ ]]; then
+                  echo "target_ref=$requested_ref" >> $GITHUB_OUTPUT
+                  echo "✅ Target ref validated: $requested_ref"
+                else
+                  echo "::error::Invalid characters in branch name: $requested_ref"
+                  exit 1
+                fi
+                ;;
+              *)
+                echo "::error::Ref not allowed for privileged build: $requested_ref"
+                exit 1
+                ;;
+            esac
+          fi
             DEV_BRANCH="${{ github.event.client_payload.branch }}"
             [ -z "$DEV_BRANCH" ] && DEV_BRANCH="dev"
 
@@ -107,7 +130,6 @@ jobs:
         with:
           repository: phu-nam-hai-jsco/task-manager-desktop
           ref: ${{ steps.checkout_ref.outputs.target_ref }}
-          token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
           path: desktop
 
       - name: Checkout Frontend Repository
@@ -115,7 +137,6 @@ jobs:
         with:
           repository: phu-nam-hai-jsco/work-management-frontend
           ref: ${{ steps.checkout_ref.outputs.target_ref }}
-          token: ${{ secrets.SUBMODULE_TOKEN || secrets.MAIN_REPO_CHECKOUT_TOKEN }}
           path: frontend
 
       - name: Setup Node.js
