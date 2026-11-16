@@ -139,7 +139,12 @@ jobs:
 
       - name: Install dependencies (frontend)
         working-directory: frontend
-        run: pnpm install --frozen-lockfile
+        # node-linker=hoisted: node_modules phẳng (không có virtual store
+        # `.pnpm/<gói@ver_hash-60-ký-tự>/node_modules/...`). Gói Next.js
+        # standalone được đóng vào bộ cài NSIS, mà makensis không mở được tệp
+        # có đường dẫn >= 260 ký tự (MAX_PATH) — với layout isolated, đường dẫn
+        # trong desktop/resources/web/standalone vượt 260 trên runner này.
+        run: pnpm install --frozen-lockfile --config.node-linker=hoisted
 
       - name: Install dependencies (desktop)
         working-directory: desktop
