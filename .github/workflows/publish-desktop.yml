@@ -121,42 +121,26 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: latest
+          node-version: "26"
 
       - name: Setup Bun (build scripts)
         uses: oven-sh/setup-bun@v2
         with:
-          bun-version: latest
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v6
-        with:
-          package_json_file: desktop/package.json
-          cache: true
-          cache_dependency_path: |
-            frontend/pnpm-lock.yaml
-            desktop/pnpm-lock.yaml
+          bun-version: "1.4.4"
 
       - name: Install dependencies (frontend)
         working-directory: frontend
-        # node-linker=hoisted: node_modules phẳng (không có virtual store
-        # `.pnpm/<gói@ver_hash-60-ký-tự>/node_modules/...`). Gói Next.js
-        # standalone được đóng vào bộ cài NSIS, mà makensis không mở được tệp
-        # có đường dẫn >= 260 ký tự (MAX_PATH) — với layout isolated, đường dẫn
-        # trong desktop/resources/web/standalone vượt 260 trên runner này.
-        run: pnpm install --frozen-lockfile --config.node-linker=hoisted
+        run: bun install --frozen-lockfile
 
       - name: Install dependencies (desktop)
         working-directory: desktop
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
       - name: Print toolchain versions
         shell: pwsh
         run: |
           Write-Host "Node           : $(node -v)"
           Write-Host "Bun            : $(bun -v)"
-          Write-Host "pnpm (frontend): $(pnpm -C frontend -v)"
-          Write-Host "pnpm (desktop) : $(pnpm -C desktop -v)"
 
       - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
