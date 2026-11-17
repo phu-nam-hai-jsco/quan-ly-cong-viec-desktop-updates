@@ -128,6 +128,16 @@ jobs:
         with:
           bun-version: "1.4.4"
 
+      - name: Cache Bun & Next.js build
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.bun/install/cache
+            frontend/.next/cache
+          key: ${{ runner.os }}-bun-nextjs-${{ hashFiles('frontend/bun.lock', 'desktop/bun.lock', 'frontend/next.config.ts') }}
+          restore-keys: |
+            ${{ runner.os }}-bun-nextjs-
+
       - name: Install dependencies (frontend)
         working-directory: frontend
         run: bun install --frozen-lockfile
