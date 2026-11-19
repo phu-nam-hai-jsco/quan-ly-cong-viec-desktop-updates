@@ -1,11 +1,11 @@
 {
-  "version": "3.7.2",
+  "version": "3.8.0",
   "notes": "Mô tả cập nhật",
-  "pub_date": "2026-11-13T08:21:21Z",
+  "pub_date": "2026-11-19T10:40:34Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RGllaWhPaW43UkdqeS9Kb1ZWYVRDdkFma2NwV2ZtNGRRQ21RTU4xZWpOZTI0MkZmYUt2Vmx3UW95dnQva3ZpNnZTNldzenBmOHoxM2V5dm1taEpwSVE4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk0NTU4MDc2CWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2NfMy43LjJfeDY0LXNldHVwLmV4ZQl2ZXJzaW9uOjMuNy4yClM2MTBxSHIvUXJYbUNRRy9OdUVQVGZUa2ZsK3BPOGV1NDBSSml3NURpTUk0Q0JLWUxnb0VJUFlZVkZmWitORmFwbmlYRWtMZDkveDRnblRCakxZNkFRPT0K",
-      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/3.7.2/quan-ly-cong-viec_3.7.2_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RHNNRU1wYjd2TTd2ZzBoMmliRVV6MHJvejNUOHJROUFtVEhXRlF2VGJXTDhCSVcvajJlenFxWWF0K1IwNUt0bll3dXFCOC9ubjJZRERNS0ZuZkY5K1E0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1MDg0ODMwCWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2NfMy44LjBfeDY0LXNldHVwLmV4ZQl2ZXJzaW9uOjMuOC4wClhERE1GaGFjazUwYXlqdkgySmg2ckM0bmN5akNSbTZjaWcyUGY4Qnh4YkdldUFFcjVnWmxRa0dDMGx3bmgwMEVmNE5TWTdoWmo0dllBemVXd0h5L0JBPT0K",
+      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/3.8.0/work-management_3.8.0_x64-setup.exe"
     }
   }
 }
