@@ -79,6 +79,17 @@ jobs:
             echo "No encrypted payload found."
           fi
 
+      # Tauri bắt buộc version semver (MAJOR.MINOR.PATCH[-pre][+build]). Kiểm sớm để không mất
+      # ~7 phút build rồi mới fail ở `tauri build` (vd 3.9.0.1 → "version must be a semver string").
+      - name: Validate version
+        shell: bash
+        run: |
+          if ! [[ "$BUILD_VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$ ]]; then
+            echo "::error::Version '$BUILD_VERSION' không phải semver (MAJOR.MINOR.PATCH, vd 3.9.1 hoặc 3.9.0-rc.1) — Tauri sẽ từ chối."
+            exit 1
+          fi
+          echo "✅ Version hợp lệ: $BUILD_VERSION"
+
       - name: Resolve Checkout Ref
         id: checkout_ref
         shell: bash
