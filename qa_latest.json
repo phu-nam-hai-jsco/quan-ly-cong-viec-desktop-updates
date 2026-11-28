@@ -1,11 +1,11 @@
 {
-  "version": "3.9.2-beta",
+  "version": "3.9.3-beta",
   "notes": "Mô tả cập nhật",
-  "pub_date": "2026-11-27T19:06:25Z",
+  "pub_date": "2026-11-28T11:04:06Z",
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RGhXZDIrYUs4OUFvaUp2b0crQTJqK2kvUFIrS3RLbTJIWThXT25QQTN0MG11eTRuemlMa1dDdWZCTU1JQmU1Q2Y2MkdaNHJMUUZOZDB3YTZyTDJKZ3dRPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1ODA2MzgwCWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8zLjkuMi1iZXRhX3g2NC1zZXR1cC5leGUJdmVyc2lvbjozLjkuMi1iZXRhCnYrSFFMRzZqRmxSODlXV3BCRzJCSE95SVQyYlM0MVRLaFp4NCtmdTB4UzN5UGsrMkpzS1FjenlLVG5HaVZoSWlKRVFSYTNIdU1TNk1WSG9DNFNKVUFRPT0K",
-      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/3.9.2-beta/work-management_3.9.2-beta_x64-setup.exe"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVSOHBRWlk1Y1Y2RGxsWStQU1RoK2JFYnpDK2lqcSs3Y200dVI4NjVad3M0OUo2ZGZUcVZ4SkFqb1psZDc5STRJbTZtM1VOZlhZaE5nWHNDWHgweEhZN2U0aFVpSHBOYUFJPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzk1ODYzODQxCWZpbGU6UXXhuqNuIEzDvSBDw7RuZyBWaeG7h2MgQmV0YV8zLjkuMy1iZXRhX3g2NC1zZXR1cC5leGUJdmVyc2lvbjozLjkuMy1iZXRhCkxLZ0ZMb3QyNHNjOEtHQ3o2YTd1cFUxTUErOWdnckVRRVBVWk5MS2J5UU01T3pZZTAxV2hFOTU4Wi9obGd5MTBQT1JaRGkxVnlnSlI2UTBsSDlVZUNnPT0K",
+      "url": "https://github.com/phu-nam-hai-jsco/quan-ly-cong-viec-desktop-updates/releases/download/3.9.3-beta/work-management_3.9.3-beta_x64-setup.exe"
     }
   }
 }
